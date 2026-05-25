@@ -25,18 +25,18 @@ export async function POST(req: NextRequest) {
         reduceOnly: true
       });
 
-      if (order.retCode === 0) return NextResponse.json({ success: true });
+      if (order.retCode === 0) return NextResponse.json({ success: true, orderId: order.result.orderId });
       return NextResponse.json({ error: order.retMsg }, { status: 400 });
     } else {
       const client = getBinanceClient(config);
-      const order = await client.submitNewOrder({
+      const order: any = await client.submitNewOrder({
         symbol,
         side: side === 'Buy' ? 'SELL' : 'BUY',
         type: 'MARKET',
         quantity: parseFloat(qty),
         reduceOnly: 'true'
       });
-      return NextResponse.json({ success: true });
+      return NextResponse.json({ success: true, orderId: order.orderId });
     }
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });

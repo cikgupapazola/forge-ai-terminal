@@ -15,6 +15,8 @@ export function parseSignal(text: string): TradingSignal {
   const tp2 = (text.match(/TP2:\s*([\d.]+)/i) || [])[1];
   const tp3 = (text.match(/TP3:\s*([\d.]+)/i) || [])[1];
   const sl = (text.match(/SL:\s*([\d.]+)/i) || [])[1];
+  const confidence = (text.match(/CONFIDENCE:\s*(\d+)%/i) || [])[1];
+  const recommendedTp = (text.match(/RECOMMENDED_TP:\s*(\d+)/i) || [])[1];
   
   const probs: string[] = [];
   const lines = text.split('\n');
@@ -33,7 +35,9 @@ export function parseSignal(text: string): TradingSignal {
     tp2: parseFloat(tp2),
     tp3: parseFloat(tp3),
     sl: parseFloat(sl),
-    probs: probs
+    probs: probs,
+    confidence: confidence ? parseInt(confidence) : 0,
+    recommendedTp: recommendedTp ? parseInt(recommendedTp) : 1
   };
 }
 
